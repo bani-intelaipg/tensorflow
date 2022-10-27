@@ -1175,8 +1175,8 @@ def main():
   if is_windows():
     print(
       '\nWARNING: Only CPU build is supported on Windows. '
-      'For using TensorFlow GPU on Windows, you will need to build/install TensorFlow in WSL2.\n'
-      'Please see https://github.com/tensorflow/tensorflow/blob/v2.11.0-rc1/RELEASE.md#major-features-and-improvements\n')
+      'For using TensorFlow GPU on Windows, you will need to '
+      'build/install TensorFlow in WSL2.\n')
     environ_cp['TF_NEED_OPENCL'] = '0'
     environ_cp['TF_CUDA_CLANG'] = '0'
     # TODO(ibiryukov): Investigate using clang as a cpu or cuda compiler on
