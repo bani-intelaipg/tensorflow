@@ -1173,6 +1173,10 @@ def main():
   setup_python(environ_cp)
 
   if is_windows():
+    print(
+      '\nWARNING: Only CPU build is supported on Windows. '
+      'For using TensorFlow GPU on Windows, you will need to build/install TensorFlow in WSL2.\n'
+      'Please see https://github.com/tensorflow/tensorflow/blob/v2.11.0-rc1/RELEASE.md#major-features-and-improvements\n')
     environ_cp['TF_NEED_OPENCL'] = '0'
     environ_cp['TF_CUDA_CLANG'] = '0'
     # TODO(ibiryukov): Investigate using clang as a cpu or cuda compiler on
@@ -1221,8 +1225,12 @@ def main():
   if (environ_cp.get('TF_NEED_ROCM') == '1' and environ_cp.get('HIP_PLATFORM')):
     write_action_env_to_bazelrc('HIP_PLATFORM', environ_cp.get('HIP_PLATFORM'))
 
-  environ_cp['TF_NEED_CUDA'] = str(
-      int(get_var(environ_cp, 'TF_NEED_CUDA', 'CUDA', False)))
+  if is_windows():
+    print('WARNING: Cannot build with CUDA support on Windows.\n')
+    environ_cp['TF_NEED_CUDA'] = '0'
+  else:
+    environ_cp['TF_NEED_CUDA'] = str(
+        int(get_var(environ_cp, 'TF_NEED_CUDA', 'CUDA', False)))
   if (environ_cp.get('TF_NEED_CUDA') == '1' and
       'TF_CUDA_CONFIG_REPO' not in environ_cp):
 
